@@ -1,0 +1,100 @@
+/*
+  Section styles that build on the design system in globals.css.
+  New sections add their styles here, so globals.css stays untouched.
+*/
+
+@layer components {
+
+  /*
+    A hairline that is gilded once, left to right, when its block scrolls into
+    view, and then settles back to grey. It plays inside a Reveal.
+  */
+  .rule-draw {
+    position: relative;
+    border-top: 1px solid var(--rule);
+  }
+
+  .rule-draw::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .reveal[data-state="shown"] .rule-draw::before {
+    animation: rule-draw 2400ms cubic-bezier(0.65, 0, 0.35, 1) var(--reveal-delay, 0ms) forwards;
+  }
+
+  /* Large, quiet numerals for steps that happen in order. */
+  .numeral {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 250;
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--graphite);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal[data-state="shown"] .rule-draw::before {
+      animation: none;
+    }
+  }
+}
+
+@keyframes rule-draw {
+  0% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+
+  55% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+/*
+      Form fields: a plain underline that lifts to champagne on focus, matching
+      the same language as links and the work list rather than a boxed input.
+    */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field>span {
+  color: var(--graphite);
+  font-size: 0.9375rem;
+}
+
+.field input,
+.field textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--rule);
+  padding-block: 0.625rem;
+  color: var(--ink);
+  font: inherit;
+  resize: vertical;
+  transition: border-color 300ms ease;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: none;
+  border-bottom-color: var(--accent);
+}

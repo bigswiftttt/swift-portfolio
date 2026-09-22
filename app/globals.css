@@ -1,26 +1,602 @@
 @import "tailwindcss";
 
+/*
+  Design system: Noir atelier
+  ---------------------------
+  A dark room lit from above. Warm black surfaces, ivory type, and a single
+  champagne accent used like gilding: on lines, hovers and focus, never on
+  large areas. Grain and a soft vignette give the page material, so it reads
+  as film or paper instead of a flat screen.
+
+  Dark is the default. The light theme is the same identity printed on ivory.
+*/
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bench: #0c0b0a;
+  --paper: #14120f;
+  --ink: #efe9df;
+  --graphite: #a39b8e;
+  --rule: #2a2622;
+  --accent: #d4b98a;
+  --glow: rgba(212, 185, 138, 0.09);
+  --vignette: rgba(0, 0, 0, 0.5);
+  --grain: 0.07;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bench: #f3efe7;
+  --paper: #faf7f1;
+  --ink: #16130f;
+  --graphite: #6b6357;
+  --rule: #d9d2c5;
+  --accent: #7a5b22;
+  --glow: rgba(122, 91, 34, 0.08);
+  --vignette: rgba(60, 45, 20, 0.12);
+  --grain: 0.05;
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --font-sans: "Hanken Grotesk Variable", "Hanken Grotesk", system-ui, sans-serif;
+  --color-bench: var(--bench);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-graphite: var(--graphite);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background: var(--bench);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /*
+    Atmosphere, layer 1 (behind the content): a pool of light from above and a
+    darkened edge, fixed to the screen so the page feels lit, not painted.
+  */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(80% 60% at 50% 0%, var(--glow), transparent 70%),
+      radial-gradient(120% 100% at 50% 40%, transparent 55%, var(--vignette) 100%);
+  }
+
+  /*
+    Atmosphere, layer 2 (over the content): fine film grain. It is a tiny
+    tiled image, so it costs almost nothing, and it never blocks clicks.
+  */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    opacity: var(--grain);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  @media (max-width: 767px) {
+    body::after {
+      opacity: calc(var(--grain) * 0.7);
+    }
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--bench);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  a {
+    text-underline-offset: 0.25em;
+    text-decoration-thickness: 1px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+
+  /* Page width and gutters. */
+  .wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .wrap {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Type: one large serif voice for display, a quiet grotesque for everything else. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(3.25rem, 10.5vw, 9.5rem);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .title {
+    font-family: var(--font-display);
+    font-weight: 340;
+    font-size: clamp(2rem, 4.6vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .lead {
+    font-family: var(--font-display);
+    font-weight: 370;
+    font-size: clamp(1.375rem, 2.1vw, 1.75rem);
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+    max-width: 34em;
+  }
+
+  /* Body copy stays under 70 characters a line. */
+  .measure {
+    max-width: 62ch;
+  }
+
+  /*
+    A hairline that is gilded from left to right, once, on load.
+  */
+  .rule-sweep {
+    position: relative;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .rule-sweep-line {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: sweep 2400ms cubic-bezier(0.65, 0, 0.35, 1) 600ms forwards;
+  }
+
+  @keyframes sweep {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /*
+    Navigation links: no underline at rest. On hover a champagne line leaves
+    to the right and re-enters from the left. Wrap the label in a span.
+  */
+  .nav-link {
+    display: block;
+    padding-block: 0.5rem;
+  }
+
+  .nav-link>span {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nav-link>span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.15em;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 600ms cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  @media (hover: hover) {
+    .nav-link:hover>span::after {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
+  }
+
+  .nav-link:focus-visible>span::after {
+    transform: scaleX(1);
+  }
+
+  /*
+    Text roll: the label slides up and out while an identical one slides in
+    from below. Use it through the Roll component.
+  */
+  .roll {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+
+  .roll-inner {
+    display: block;
+    transform: translateY(0);
+    transition: transform 600ms cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  .roll-inner::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    white-space: nowrap;
+  }
+
+  @media (hover: hover) {
+    :is(a, button):hover .roll-inner {
+      transform: translateY(-100%);
+    }
+  }
+
+  /* Buttons: a thin gilt outline; on hover champagne rises to fill it. */
+  .button {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.375rem;
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    transition:
+      color 500ms ease,
+      border-color 500ms ease;
+  }
+
+  .button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--accent);
+    transform: translateY(101%);
+    transition: transform 600ms cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  @media (hover: hover) {
+    .button:hover {
+      color: var(--bench);
+    }
+
+    .button:hover::before {
+      transform: translateY(0);
+    }
+  }
+
+  .button-quiet {
+    border-color: var(--rule);
+  }
+
+  @media (hover: hover) {
+    .button-quiet:hover {
+      border-color: var(--accent);
+    }
+  }
+
+  /* Headline words rise out of an invisible mask, one after another. */
+  .split-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding: 0.12em 0.05em 0.2em;
+    margin: -0.12em -0.05em -0.2em;
+  }
+
+  .split-word-inner {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: word-rise 1200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes word-rise {
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* Hero copy that settles into place after the headline. */
+  .enter {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: enter 1100ms cubic-bezier(0.16, 1, 0.3, 1) var(--enter-delay, 0ms) forwards;
+  }
+
+  @keyframes enter {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* A trailing ring for mouse users, invisible on touch screens. */
+  .cursor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 70;
+    display: none;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cursor {
+      display: block;
+    }
+  }
+
+  .cursor::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: -18px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--accent);
+    border-radius: 9999px;
+    opacity: 0;
+    transform: scale(0.4);
+    transition:
+      transform 450ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 300ms ease,
+      background-color 300ms ease;
+  }
+
+  .cursor[data-visible="true"]::before {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+
+  .cursor[data-hover="true"]::before {
+    transform: scale(1.7);
+    background-color: color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+
+  /* A champagne line across the top that fills as you read down the page. */
+  .scroll-progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 60;
+    height: 2px;
+    pointer-events: none;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  @keyframes scroll-fill {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .scroll-progress {
+      animation: scroll-fill linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+
+  /* Content that rises into place as it scrolls into view. */
+  .reveal {
+    transition:
+      opacity 1000ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+      transform 1000ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+  }
+
+  .reveal[data-state="hidden"] {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+
+  /*
+    The project list. A gold line is drawn across a row on hover, its title
+    slides right, and the rows you are not looking at fall back.
+  */
+  .work-row {
+    position: relative;
+    border-top: 1px solid var(--rule);
+  }
+
+  .work-row::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 800ms cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  .work-title {
+    display: block;
+    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .work-row:focus-within::before {
+    transform: scaleX(1);
+  }
+
+  .work-row:focus-within .work-title {
+    transform: translateX(0.5rem);
+  }
+
+  @media (hover: hover) {
+    .work-row {
+      transition: opacity 500ms ease;
+    }
+
+    .work-list:hover .work-row:not(:hover) {
+      opacity: 0.35;
+    }
+
+    .work-row:hover::before {
+      transform: scaleX(1);
+    }
+
+    .work-row:hover .work-title {
+      transform: translateX(0.5rem);
+    }
+  }
+
+  /* The preview that trails the cursor over the project list. */
+  .work-preview {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 35;
+    display: none;
+    width: 340px;
+    height: 240px;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .work-preview {
+      display: block;
+    }
+  }
+
+  .work-preview-frame {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    opacity: 0;
+    transform: scale(0.92);
+    transition:
+      opacity 350ms ease,
+      transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .work-preview[data-active="true"] .work-preview-frame {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .work-plate {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 400ms ease;
+  }
+
+  .work-plate[data-on="true"] {
+    opacity: 1;
+  }
+
+  /* Theme toggle icons swap on the data-theme attribute. */
+  .theme-sun {
+    display: none;
+  }
+
+  :root[data-theme="dark"] .theme-sun {
+    display: block;
+  }
+
+  :root[data-theme="dark"] .theme-moon {
+    display: none;
+  }
+
+  /* Visitors who ask for less motion get the finished state of everything. */
+  @media (prefers-reduced-motion: reduce) {
+    .rule-sweep-line {
+      animation: none;
+      transform: scaleX(1);
+    }
+
+    .split-word-inner {
+      transform: none;
+      animation: none;
+    }
+
+    .enter {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+
+    .cursor,
+    .scroll-progress {
+      display: none;
+    }
+
+    .reveal {
+      transition: none;
+    }
+
+    .reveal[data-state="hidden"] {
+      opacity: 1;
+      transform: none;
+    }
+
+    .work-row::before,
+    .work-title,
+    .work-preview-frame,
+    .work-plate {
+      transition: none;
+    }
+
+    .roll-inner,
+    .nav-link>span::after,
+    .button::before {
+      transition: none;
+    }
+  }
 }
