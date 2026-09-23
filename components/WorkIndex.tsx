@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Project } from "@/lib/site";
 import { Reveal } from "./Reveal";
@@ -8,6 +9,7 @@ import { Reveal } from "./Reveal";
 const PREVIEW_W = 340;
 const PREVIEW_H = 240;
 
+/* A different pool of light for each placeholder, so the four never look alike. */
 const glows = [
     "20% 0%",
     "90% 10%",
@@ -46,6 +48,11 @@ function Plate({ project, index }: { project: Project; index: number }) {
     );
 }
 
+/**
+ * The project list. On a desktop, hovering a row dims the others, draws a gold
+ * line across it, and floats a preview that trails the cursor. On a phone it is
+ * a clean, tappable list.
+ */
 export function WorkIndex({ projects }: { projects: Project[] }) {
     const [active, setActive] = useState<number | null>(null);
     const listRef = useRef<HTMLUListElement>(null);
@@ -111,24 +118,21 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
                 {projects.map((project, index) => (
                     <li key={project.slug} className="work-row">
                         <Reveal delay={index * 90}>
-                            <a
-                            href={project.links.live}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="work-link grid gap-x-8 gap-y-3 py-9 md:grid-cols-12 md:items-baseline md:py-12"
-                            onMouseEnter={() => setActive(index)}
+                            <Link
+                                href={`/work/${project.slug}`}
+                                className="work-link grid gap-x-8 gap-y-3 py-9 md:grid-cols-12 md:items-baseline md:py-12"
+                                onMouseEnter={() => setActive(index)}
                             >
-                            <span className="title work-title md:col-span-5">
-                                {project.title}
-                            </span>
-                            <span className="measure text-graphite md:col-span-4">
-                                {project.summary}
-                            </span>
-                            <span className="text-graphite md:col-span-3 md:text-right">
-                                {project.kind}, {project.year}
-                            </span>
-                            <span className="sr-only">(opens the live site in a new tab)</span>
-                            </a>
+                                <span className="title work-title md:col-span-5">
+                                    {project.title}
+                                </span>
+                                <span className="measure text-graphite md:col-span-4">
+                                    {project.summary}
+                                </span>
+                                <span className="text-graphite md:col-span-3 md:text-right">
+                                    {project.kind}, {project.year}
+                                </span>
+                            </Link>
                         </Reveal>
                     </li>
                 ))}
@@ -152,6 +156,6 @@ export function WorkIndex({ projects }: { projects: Project[] }) {
                     ))}
                 </div>
             </div>
-    </>
-  );
+        </>
+    );
 }
