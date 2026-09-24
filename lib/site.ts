@@ -18,10 +18,13 @@ export const site = {
 };
 
 export const hero = {
-  headline: "I build web products, carefully.",
-  intro:
-    "Full-stack developer building AI-powered web apps and business websites, from the first sketch to the deployed product.",
-  availability: "Available for freelance projects and collaborations.",
+  headline: "What are you trying to build?",
+  /** The hero's two answers, standing in for the usual pair of buttons. */
+  answers: [
+    { label: "Show me your work", href: "#work" },
+    { label: "I have a project", href: "#contact" },
+  ],
+  meta: "Full-stack developer. Available for freelance work.",
 };
 
 type ProjectImage = { src: string; alt: string; width: number; height: number };

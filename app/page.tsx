@@ -23,28 +23,25 @@ const after = (ms: number) => ({ "--enter-delay": `${ms}ms` }) as CSSProperties;
 export default function Home() {
   return (
     <>
-      <section className="wrap pb-28 pt-10 md:pb-44 md:pt-20">
-        <SplitReveal as="h1" text={hero.headline} className="display max-w-[12ch]" />
+      <section className="wrap pb-24 pt-10 md:pb-36 md:pt-20">
+        <SplitReveal as="h1" text={hero.headline} className="display max-w-[16ch]" />
 
-        <div className="rule-sweep mt-12 md:mt-16" aria-hidden="true">
-          <span className="rule-sweep-line" />
-        </div>
-
-        <div className="mt-10 grid gap-8 md:mt-12 md:grid-cols-12">
-          <p className="lead enter md:col-span-7" style={after(1200)}>
-            {hero.intro}
-          </p>
-          <div className="enter md:col-span-4 md:col-start-9" style={after(1450)}>
-            <p className="text-graphite">{hero.availability}</p>
-            <p className="mt-6 flex flex-wrap gap-3">
-              <a className="button" href="#work">
-                <Roll>See my work</Roll>
-              </a>
-              <a className="button button-quiet" href="#contact">
-                <Roll>Get in touch</Roll>
-              </a>
-            </p>
-          </div>
+        <div className="mt-12 enter md:mt-16" style={after(900)}>
+          <ul className="border-t border-rule">
+            {hero.answers.map((answer, index) => (
+              <li key={answer.href}>
+                <a href={answer.href} className="hero-answer group flex items-center justify-between gap-6 border-b border-rule py-7 md:py-9">
+                  <span className="subtitle hero-answer-label">
+                    <Roll>{answer.label}</Roll>
+                  </span>
+                  <span className="hero-answer-arrow text-3xl md:text-4xl" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-graphite">{hero.meta}</p>
         </div>
       </section>
 

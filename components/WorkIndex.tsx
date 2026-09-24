@@ -1,161 +1,68 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import type { Project } from "@/lib/site";
 import { Reveal } from "./Reveal";
 
-const PREVIEW_W = 340;
-const PREVIEW_H = 240;
-
-/* A different pool of light for each placeholder, so the four never look alike. */
-const glows = [
-    "20% 0%",
-    "90% 10%",
-    "10% 100%",
-    "80% 90%",
-];
+/* A different pool of light for each placeholder, so cards without a screenshot don't look alike. */
+const glows = ["20% 0%", "90% 10%", "10% 100%", "80% 90%"];
 
 function Plate({ project, index }: { project: Project; index: number }) {
-    if (project.image) {
-        return (
-            <Image
-                src={project.image.src}
-                alt=""
-                width={project.image.width}
-                height={project.image.height}
-                sizes="340px"
-                className="h-full w-full object-cover"
-            />
-        );
-    }
-
+  if (project.image) {
     return (
-        <div
-            className="flex h-full w-full flex-col justify-end p-6"
-            style={{
-                background: `radial-gradient(120% 90% at ${glows[index % glows.length]}, color-mix(in srgb, var(--accent) 32%, transparent), transparent 62%), linear-gradient(160deg, var(--paper), var(--bench))`,
-            }}
-        >
-            <span className="font-display text-3xl leading-none tracking-tight">
-                {project.title}
-            </span>
-            <span className="mt-2 text-sm text-graphite">
-                {project.kind}, {project.year}
-            </span>
-        </div>
+      <Image
+        src={project.image.src}
+        alt=""
+        width={project.image.width}
+        height={project.image.height}
+        sizes="(min-width: 768px) 50vw, 100vw"
+        className="work-card-image h-full w-full object-cover"
+      />
     );
+  }
+
+  return (
+    <div
+      className="flex h-full w-full flex-col justify-end p-6"
+      style={{
+        background: `radial-gradient(120% 90% at ${glows[index % glows.length]}, color-mix(in srgb, var(--accent) 32%, transparent), transparent 62%), linear-gradient(160deg, var(--paper), var(--bench))`,
+      }}
+    >
+      <span className="font-display text-3xl leading-none tracking-tight">
+        {project.title}
+      </span>
+    </div>
+  );
 }
 
 /**
- * The project list. On a desktop, hovering a row dims the others, draws a gold
- * line across it, and floats a preview that trails the cursor. On a phone it is
- * a clean, tappable list.
+ * The project grid. Every card shows its screenshot at all times, on phone and
+ * desktop alike. Desktop adds a hover moment (the image lifts, the card's
+ * siblings dim) but seeing the work never depends on a pointer existing.
  */
 export function WorkIndex({ projects }: { projects: Project[] }) {
-    const [active, setActive] = useState<number | null>(null);
-    const listRef = useRef<HTMLUListElement>(null);
-    const previewRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const list = listRef.current;
-        const preview = previewRef.current;
-        if (!list || !preview) return;
-        if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-
-        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        let x = 0;
-        let y = 0;
-        let targetX = 0;
-        let targetY = 0;
-        let frame = 0;
-        let placed = false;
-
-        const render = () => {
-            const ease = reduced ? 1 : 0.14;
-            x += (targetX - x) * ease;
-            y += (targetY - y) * ease;
-            preview.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-            frame =
-                Math.abs(targetX - x) > 0.1 || Math.abs(targetY - y) > 0.1
-                    ? requestAnimationFrame(render)
-                    : 0;
-        };
-
-        const onMove = (event: PointerEvent) => {
-            targetX = Math.min(event.clientX + 28, window.innerWidth - PREVIEW_W - 16);
-            targetY = Math.max(
-                88,
-                Math.min(event.clientY - PREVIEW_H / 2, window.innerHeight - PREVIEW_H - 16),
-            );
-            if (!placed) {
-                placed = true;
-                x = targetX;
-                y = targetY;
-            }
-            if (!frame) frame = requestAnimationFrame(render);
-        };
-
-        const onLeave = () => {
-            placed = false;
-            setActive(null);
-        };
-
-        list.addEventListener("pointermove", onMove, { passive: true });
-        list.addEventListener("pointerleave", onLeave);
-
-        return () => {
-            list.removeEventListener("pointermove", onMove);
-            list.removeEventListener("pointerleave", onLeave);
-            if (frame) cancelAnimationFrame(frame);
-        };
-    }, []);
-
-    return (
-        <>
-            <ul ref={listRef} className="work-list border-b border-rule">
-                {projects.map((project, index) => (
-                    <li key={project.slug} className="work-row">
-                        <Reveal delay={index * 90}>
-                            <Link
-                                href={`/work/${project.slug}`}
-                                className="work-link grid gap-x-8 gap-y-3 py-9 md:grid-cols-12 md:items-baseline md:py-12"
-                                onMouseEnter={() => setActive(index)}
-                            >
-                                <span className="title work-title md:col-span-5">
-                                    {project.title}
-                                </span>
-                                <span className="measure text-graphite md:col-span-4">
-                                    {project.summary}
-                                </span>
-                                <span className="text-graphite md:col-span-3 md:text-right">
-                                    {project.kind}, {project.year}
-                                </span>
-                            </Link>
-                        </Reveal>
-                    </li>
-                ))}
-            </ul>
-
-            <div
-                ref={previewRef}
-                className="work-preview"
-                data-active={active !== null}
-                aria-hidden="true"
-            >
-                <div className="work-preview-frame">
-                    {projects.map((project, index) => (
-                        <div
-                            key={project.slug}
-                            className="work-plate"
-                            data-on={active === index}
-                        >
-                            <Plate project={project} index={index} />
-                        </div>
-                    ))}
-                </div>
+  return (
+    <div className="work-grid grid gap-x-8 gap-y-12 md:grid-cols-2 md:gap-y-16">
+      {projects.map((project, index) => (
+        <Reveal key={project.slug} delay={index * 90}>
+          <Link href={`/work/${project.slug}`} className="work-card group block">
+            <div className="work-card-frame relative overflow-hidden border border-rule">
+              <div style={{ aspectRatio: "1366 / 552" }}>
+                <Plate project={project} index={index} />
+              </div>
             </div>
-        </>
-    );
+
+            <div className="mt-5 flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-4">
+              <span className="title work-title text-[length:clamp(1.5rem,2.6vw,2.25rem)]">
+                {project.title}
+              </span>
+              <span className="text-graphite md:shrink-0">
+                {project.kind}, {project.year}
+              </span>
+            </div>
+            <p className="measure mt-2 text-graphite">{project.summary}</p>
+          </Link>
+        </Reveal>
+      ))}
+    </div>
+  );
 }
