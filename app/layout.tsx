@@ -76,18 +76,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SmoothScroll />
         <Cursor />
         <div className="scroll-progress" aria-hidden="true" />
-        
+
+        <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-bench"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-bench"
         >
-          Skip to content
-        </a>
-        <Header />
-        <main id="main" className="pt-[3.75rem] md:pt-[5.75rem]">
-          {children}
-        </main>
-        <Footer />
-      </body>
+        Skip to content
+      </a>
+      <Header />
+      <main id="main" className="pt-[3.75rem] md:pt-[5.75rem]">
+        {children}
+      </main>
+      <Footer />
+    </body>
     </html>
   );
 }
