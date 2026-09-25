@@ -6,11 +6,15 @@
 export const site = {
   /** The name shown in the header, footer and page titles. */
   name: "Swift",
+  /** The name being indexed for search: shown in <title>, meta description, and structured data. */
+  displayName: "Muhammad Swift",
+  /** Legal name, carried alongside displayName so both are indexed as the same person. */
+  legalName: "Awwal Bashir",
   /** Set NEXT_PUBLIC_SITE_URL when you get a custom domain. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://swiftworks.vercel.app",
-  title: "Swift, full-stack developer",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://hiremswift.vercel.app",
+  title: "Muhammad Swift (Awwal Bashir), full-stack developer",
   description:
-    "Full-stack developer building AI-powered web apps and client websites, from idea to deployment. Based in Nigeria, open to freelance work.",
+    "Muhammad Swift (Awwal Bashir), a full-stack developer building AI-powered web apps and client websites. Based in Nigeria, open to freelance work.",
   email: "bashirawwal30@gmail.com",
   github: "https://github.com/bigswiftttt",
   x: "https://x.com/_big_swift",

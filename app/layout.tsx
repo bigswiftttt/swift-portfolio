@@ -46,17 +46,37 @@ const themeScript = `
 })();
 `;
 
+/*
+  Person structured data (JSON-LD). This is what tells Google that
+  "Muhammad Swift" and "Awwal Bashir" are the same person, rather than two
+  unrelated names that happen to appear on the same page.
+*/
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.displayName,
+  alternateName: site.legalName,
+  url: site.url,
+  jobTitle: "Full-stack developer",
+  email: `mailto:${site.email}`,
+  sameAs: [site.github, site.x],
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
       </head>
       <body>
         <SmoothScroll />
         <Cursor />
         <div className="scroll-progress" aria-hidden="true" />
-        <a
+        
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-ink focus:px-4 focus:py-2 focus:text-bench"
         >
