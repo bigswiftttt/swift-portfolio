@@ -274,6 +274,43 @@ export const about = {
   ],
 };
 
+export const experienceIntro = {
+  heading: "Experience",
+  intro: "How I got here, in order.",
+};
+
+export const experience = [
+  {
+    period: "Dec 2023",
+    title: "Montessori Kids Store",
+    description:
+      "Built a Shopify store for an online kids' shop based in Australia.",
+  },
+  {
+    period: "Dec 2023 – Mar 2024",
+    title: "New Love Expression",
+    description:
+      "Built a Shopify store for an online shop selling plus-size women's clothing and jewellery.",
+  },
+  {
+    period: "Apr 2024 – Jul 2024",
+    title: "CharlieLuxHome",
+    description: "Built a Shopify website for a home décor retailer.",
+  },
+  {
+    period: "Mid 2024 onward",
+    title: "Learning to build with code",
+    description:
+      "Stepped away from Shopify work to learn full-stack development from the ground up.",
+  },
+  {
+    period: "2026",
+    title: "Full-stack projects",
+    description:
+      "Designed and built DevForge, StudyOS, Atlas and Glamorous Thread, shown in Selected work above.",
+  },
+];
+
 export const contact = {
   heading: "Request a project",
   intro:

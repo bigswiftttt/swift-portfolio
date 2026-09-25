@@ -3,6 +3,8 @@ import Image from "next/image";
 import {
   about,
   contact,
+  experience,
+  experienceIntro,
   hero,
   processIntro,
   projects,
@@ -155,6 +157,41 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section id="experience" className="wrap scroll-mt-20 pb-28 md:pb-44">
+        <Reveal>
+          <div className="mb-12 grid gap-4 md:mb-20 md:grid-cols-12 md:items-end md:gap-8">
+            <h2 className="display text-[length:clamp(2.75rem,7vw,6rem)] md:col-span-8">
+              {experienceIntro.heading}
+            </h2>
+            <p className="measure text-graphite md:col-span-4">
+              {experienceIntro.intro}
+            </p>
+          </div>
+        </Reveal>
+
+        <ol className="border-b border-rule">
+          {experience.map((item, index) => (
+            <li key={item.title}>
+              <Reveal delay={index * 80}>
+                <div className="rule-draw grid gap-2 py-8 md:grid-cols-12 md:gap-8 md:py-10">
+                  <span className="text-graphite md:col-span-3">
+                    {item.period}
+                  </span>
+                  <div className="md:col-span-8 md:col-start-5">
+                    <h3 className="subtitle">{item.title}</h3>
+                    <p className="measure mt-2 text-graphite">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section id="contact" className="wrap scroll-mt-20 pb-28 md:pb-44"></section>
 
       <section id="contact" className="wrap scroll-mt-20 pb-28 md:pb-44">
         <div className="grid gap-12 md:grid-cols-12 md:gap-8">
