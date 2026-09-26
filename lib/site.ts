@@ -266,13 +266,21 @@ export const about = {
     width: 1000,
     height: 1250,
   },
-  stack: [
-    { group: "Interface", items: "Next.js, React, TypeScript, Tailwind CSS" },
-    { group: "Data and back end", items: "Node.js, Supabase, PostgreSQL" },
-    { group: "AI", items: "Gemini API, Groq" },
-    { group: "Delivery", items: "Vercel, Git, GitHub" },
-  ],
 };
+
+export const skillsIntro = {
+  heading: "Skills",
+  intro: "Tools and technologies I build with.",
+};
+
+export const skills = [
+  { group: "Languages", items: "TypeScript, JavaScript" },
+  { group: "Frontend", items: "React, Next.js, Tailwind CSS" },
+  { group: "Backend and data", items: "Node.js, Supabase, PostgreSQL" },
+  { group: "AI", items: "Gemini API, Groq" },
+  { group: "E-commerce", items: "Shopify, Liquid" },
+  { group: "Tools and delivery", items: "Git, GitHub, Vercel" },
+];
 
 export const experienceIntro = {
   heading: "Experience",

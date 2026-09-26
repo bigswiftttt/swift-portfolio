@@ -10,6 +10,8 @@ import {
   projects,
   services,
   servicesIntro,
+  skills,
+  skillsIntro,
   steps,
   work,
 } from "@/lib/site";
@@ -141,21 +143,32 @@ export default function Home() {
               <p className="measure mt-6 text-graphite">{about.body}</p>
             </Reveal>
 
-            <Reveal delay={220}>
-              <dl className="mt-12 md:mt-16">
-                {about.stack.map((row) => (
-                  <div
-                    key={row.group}
-                    className="rule-draw grid gap-1 py-5 md:grid-cols-9 md:gap-8"
-                  >
-                    <dt className="text-graphite md:col-span-4">{row.group}</dt>
-                    <dd className="md:col-span-5">{row.items}</dd>
-                  </div>
-                ))}
-              </dl>
-            </Reveal>
           </div>
         </div>
+      </section>
+
+      <section id="skills" className="wrap scroll-mt-20 pb-28 md:pb-44">
+        <Reveal>
+          <div className="mb-12 grid gap-4 md:mb-20 md:grid-cols-12 md:items-end md:gap-8">
+            <h2 className="display text-[length:clamp(2.75rem,7vw,6rem)] md:col-span-8">
+              {skillsIntro.heading}
+            </h2>
+            <p className="measure text-graphite md:col-span-4">
+              {skillsIntro.intro}
+            </p>
+          </div>
+        </Reveal>
+
+        <dl className="border-b border-rule">
+          {skills.map((row, index) => (
+            <Reveal key={row.group} delay={index * 70}>
+              <div className="rule-draw grid gap-1 py-6 md:grid-cols-12 md:gap-8 md:py-7">
+                <dt className="text-graphite md:col-span-4">{row.group}</dt>
+                <dd className="md:col-span-8">{row.items}</dd>
+              </div>
+            </Reveal>
+          ))}
+        </dl>
       </section>
 
       <section id="experience" className="wrap scroll-mt-20 pb-28 md:pb-44">
