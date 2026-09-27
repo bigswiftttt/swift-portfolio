@@ -66,13 +66,7 @@ export default async function ProjectPage({ params }: Props) {
                         <dt className="text-graphite">Year</dt>
                         <dd className="mt-1">{project.year}</dd>
                     </div>
-                    {project.stack && (
-                        <div className="sm:col-span-2 md:col-span-1">
-                            <dt className="text-graphite">Built with</dt>
-                            <dd className="mt-1">{project.stack.join(", ")}</dd>
-                        </div>
-                    )}
-                    <div className="md:col-span-1">
+                    <div className="sm:col-span-2 md:col-span-2">
                         <dt className="text-graphite">Links</dt>
                         <dd className="mt-1 flex flex-wrap gap-x-5 gap-y-1">
                             <a
@@ -98,6 +92,16 @@ export default async function ProjectPage({ params }: Props) {
                 </dl>
             </Reveal>
 
+            {project.stack && (
+                <Reveal delay={190}>
+                    <p className="measure mt-6 text-graphite">
+                        <span>Built with </span>
+                        <span className="text-ink">{project.stack.join(", ")}</span>
+                    </p>
+                </Reveal>
+            )
+            }
+
             {project.image && (
                 <Reveal delay={100}>
                     <div className="mt-12 border border-rule md:mt-16">
@@ -112,7 +116,8 @@ export default async function ProjectPage({ params }: Props) {
                         />
                     </div>
                 </Reveal>
-            )}
+            )
+            }
 
             {project.approach && (
                 <section className="mt-16 grid gap-4 border-t border-rule pt-10 md:mt-24 md:grid-cols-12 md:gap-8 md:pt-14">
@@ -123,7 +128,8 @@ export default async function ProjectPage({ params }: Props) {
                         <p className="measure text-lg">{project.approach}</p>
                     </Reveal>
                 </section>
-            )}
+            )
+            }
 
             {project.features && (
                 <section className="mt-16 md:mt-24">
@@ -145,7 +151,8 @@ export default async function ProjectPage({ params }: Props) {
                         ))}
                     </ul>
                 </section>
-            )}
+            )
+            }
 
             {project.gallery && project.gallery.length > 0 && (
                 <section className="mt-16 grid gap-6 md:mt-24 md:grid-cols-2 md:gap-8">
@@ -164,7 +171,8 @@ export default async function ProjectPage({ params }: Props) {
                         </Reveal>
                     ))}
                 </section>
-            )}
+            )
+            }
 
             <nav
                 aria-label="Next project"
